@@ -44,10 +44,12 @@ build/completed_time_stamp: ${SRCS}
 	python3 setup.py sdist bdist_wheel
 	touch build/completed_time_stamp
 
+.PHONY: release
 release: build/completed_ts ## Upload a release to pypi.org
 	python3 -m twine upload dist/*
 
-release-test: build/completed_ts ## Upload a releast to test.pypi.org
+.PHONY: release-test
+release-test: build/completed_ts ## Upload a releas to test.pypi.org
 	python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 .PHONY: f, format
@@ -56,8 +58,12 @@ format: ## format, lint py files with isort, black and flake8
 	isort ${format_srcs}
 	black ${format_srcs}
 	flake8 ${format_srcs}
+
+.PHONY: mypy
+mypy: ## Run mpy on sources
 	mypy ${format_srcs}
 
+.PHONY: coverage
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source taperable_helix -m pytest
 	coverage report -m
