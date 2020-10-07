@@ -14,5 +14,6 @@ var/
 .installed.cfg
 *.egg
 *.eggs
+__pycache__/
 .mypy_cache/
-.vscode
+.vscode/
