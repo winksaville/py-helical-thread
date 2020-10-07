@@ -15,11 +15,11 @@ class HelicalThread(Helix):
     the various using the fields below and in Helix.
     """
 
-    angle_degs: float = 45 #: angle in degrees
-    ext_clearance: float = 0.1 #: External clearance between external and internal threads
-    major_cutoff: float = 0 #: Size of of flat at the major diameter
-    minor_cutoff: float = 0 #: Size of flat at the minor diameter
-    thread_overlap: float = 0.001 #: Amount to overlap threads with the core so union of core and threads is a manifold
+    angle_degs: float = 45  #: angle in degrees
+    ext_clearance: float = 0.1  #: External clearance between external and internal threads
+    major_cutoff: float = 0  #: Size of of flat at the major diameter
+    minor_cutoff: float = 0  #: Size of flat at the minor diameter
+    thread_overlap: float = 0.001  #: Amount to overlap threads with the core so union of core and threads is a manifold
 
 
 class ThreadHelixes:
@@ -28,13 +28,13 @@ class ThreadHelixes:
     the external thread, prefixed with `ext_`
     """
 
-    ht: HelicalThread #: The basic Dimensions of the helixes
+    ht: HelicalThread  #: The basic Dimensions of the helixes
 
-    int_helix_radius: float #: The internal thread radius
-    int_helixes: List[HelixLocation] #: List of the internal helix locations
+    int_helix_radius: float  #: The internal thread radius
+    int_helixes: List[HelixLocation]  #: List of the internal helix locations
 
-    ext_helix_radius: float #: The external thread radius
-    ext_helixes: List[HelixLocation] #: List of the external helix locations
+    ext_helix_radius: float  #: The external thread radius
+    ext_helixes: List[HelixLocation]  #: List of the external helix locations
 
     def __init__(self, ht: HelicalThread) -> None:
         self.ht = ht
