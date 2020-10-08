@@ -10,7 +10,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 requirements: List[str] = [
-    "markdown",
+    "taperable-helix",
 ]
 
 setup_requirements: List[str] = [
@@ -23,9 +23,15 @@ test_requirements: List[str] = [
 
 
 setup(
+    name="helical_thread",
+    version="0.1.0",
+    url="https://github.com/winksaville/py-helical-thread",
+    license="MIT",
     author="Wink Saville",
     author_email="wink@saville.com",
+    description="Creates a helical thread",
     python_requires=">=3.7",
+    platforms=["any"],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
@@ -36,17 +42,13 @@ setup(
         "Programming Language :: Python :: 3.8",
     ],
     keywords="helical helix thread",
-    name="helical-thread",  # Replace with your own username
     # entry_points={"console_scripts": ["helicalthread=helical_thread.command_line:main"],},
-    version="0.1.0",
-    license="MIT",
-    description="Creates a helical thread",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/winksaville/helical-thread",
     packages=find_packages(),
     install_requires=requirements,
     setup_requires=setup_requirements,
+    platform="any",
     tests_require=test_requirements,
     test_suite="tests",
 )

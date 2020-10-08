@@ -16,7 +16,9 @@ class HelicalThread(Helix):
     """
 
     angle_degs: float = 45  #: angle in degrees
-    ext_clearance: float = 0.1  #: External clearance between external and internal threads
+    ext_clearance: float = (
+        0.1  #: External clearance between external and internal threads
+    )
     major_cutoff: float = 0  #: Size of of flat at the major diameter
     minor_cutoff: float = 0  #: Size of flat at the minor diameter
     thread_overlap: float = 0.001  #: Amount to overlap threads with the core so union of core and threads is a manifold
@@ -146,8 +148,8 @@ def helical_thread(ht: HelicalThread) -> ThreadHelixes:
     # )
 
     ext_thread_half_height_at_ext_helix_radius: float = (
-        ((ht.pitch - ht.minor_cutoff) / 2) - ext_vert_adj
-    )
+        (ht.pitch - ht.minor_cutoff) / 2
+    ) - ext_vert_adj
     ext_thread_half_height_at_ext_helix_radius_plus_tova: float = (
         ext_thread_half_height_at_ext_helix_radius + thread_overlap_vert_adj
     )

@@ -65,7 +65,7 @@ mypy: ## Run mpy on sources
 
 .PHONY: coverage
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source taperable_helix -m pytest
+	coverage run --source helical_thread -m pytest
 	coverage report -m
 	# coverage html
 	# $(BROWSER) htmlcov/index.html
@@ -88,10 +88,42 @@ bumpver-major: ## Bump major field of current_version
 
 .PHONY: test, t
 t: test
-test:
+test: ## Test
 	pytest tests
+
+.PHONY: test-all
+test-all: ## Run tests on every Python version with tox
+	tox
+
+.PHONY: install-dev
+install-dev: ## Developement install in editable mode
+	#pip install -e .
+	pip install -e . -r dev-requirements.txt
+
+# Update dependencies, used by update
+# Note: You can not use --generate-hashes parameter with editable installs
+.PHONY: update-deps
+update-deps:
+	# No requirements in setup.py so skip
+	# pip-compile --upgrade --allow-unsafe --output-file requirments.txt
+	# pip install --upgrade -r requirements.txt
+	pip-compile --upgrade --allow-unsafe --output-file dev-requirements.txt dev-requirements.in
+	pip install --upgrade -r dev-requirements.txt
+
+# Besure pip-tools is installed, used by update
+.PHONY: update-init
+update-init:
+	pip install pip-tools
+
+# Invoke update when you want to update the dev-requirments.
+# See: https://stackoverflow.com/a/33685899
+#
+.PHONY: update-dev
+update-dev: clean update-init update-deps install-dev ## Update dev-requirements
 
 .PHONY: clean
 clean:
-	rm -rf build dist helical_thread_winksaville.egg-info __pycache__
+	rm -f .coverage
+	rm -rf .tox/
+	rm -rf build dist helical_thread.egg-info ./helical_thread/__pycache__ ./tests/__pycache__
 	rm -rf .mypy_cache .pytest_cache

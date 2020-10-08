@@ -17,3 +17,7 @@ var/
 __pycache__/
 .mypy_cache/
 .vscode/
+.tox/
+.coverage
+.coverage.*
+.cache

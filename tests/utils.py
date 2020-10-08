@@ -3,58 +3,9 @@ from functools import reduce
 from math import radians, sqrt
 from typing import List, Sequence, Tuple, Union, cast
 
-import cadquery as cq
-
 X: int = 0
 Y: int = 1
 Z: int = 2
-
-_ctx = None
-
-
-def setCtx(ctx) -> None:
-    """
-    Call setCtx() with globals() prior to using
-    show or dbg methods when using cq-editor.
-    """
-    global _ctx
-    _ctx = ctx
-
-
-if "cq_editor" in sys.modules:
-    # from __main__ import self as _cq_editor
-    from logbook import info as _cq_log
-
-    def show(o: object, name=None):
-        if _ctx is None:
-            raise ValueError("utils.setCtx was not called")
-        if _ctx["show_object"] is None:
-            raise ValueError("_ctx['show_object'] is not available")
-        _ctx["show_object"](o, name=name)
-        # _cq_editor.components["object_tree"].addObject(o) # Does not work
-
-    def dbg(*args):
-        _cq_log(*args)
-
-
-else:
-
-    def show(o: object, name=None):
-        if name is None:
-            name = str(id(o))
-        if o is None:
-            dbg(f"{name}: o=None")
-        elif isinstance(o, cq.Workplane):
-            wp: cq.Workplane = o
-            if isinstance(wp.val(), cq.Shape):
-                dbg(f"{name}: valid={cast(cq.Shape, wp.val()).isValid()} {vars(o)}")
-            else:
-                dbg(f"{name}: vars(o))")
-        else:
-            dbg(f"{name}: {o}")
-
-    def dbg(*args):
-        print(*args)
 
 
 def xDist_2d(linePt1: Tuple[float, float], linePt2: Tuple[float, float]) -> float:
@@ -110,7 +61,8 @@ def slope_2d(linePt1: Tuple[float, float], linePt2: Tuple[float, float]) -> floa
 
 
 def slope_yIntercept_2d(
-    linePt1: Tuple[float, float], linePt2: Tuple[float, float],
+    linePt1: Tuple[float, float],
+    linePt2: Tuple[float, float],
 ) -> Tuple[float, float]:
     """
     Return the two tuple (yIntercept, Slope) of line
@@ -126,7 +78,9 @@ def slope_yIntercept_2d(
 
 
 def lineToPtDirection_2d(
-    linePt1: Tuple[float, float], linePt2: Tuple[float, float], pt: Tuple[float, float],
+    linePt1: Tuple[float, float],
+    linePt2: Tuple[float, float],
+    pt: Tuple[float, float],
 ) -> float:
     """
     Return value is > 0 if pt is above the line, < 0 if below and 0 if on the line
@@ -276,7 +230,9 @@ def split_2d(
 
 
 def perpendicular_distance_pt_to_line_2d(
-    pt: Tuple[float, float], linePt1: Tuple[float, float], linePt2: Tuple[float, float],
+    pt: Tuple[float, float],
+    linePt1: Tuple[float, float],
+    linePt2: Tuple[float, float],
 ) -> float:
     """
     Returns distance from pt to line define by linePt1 and linePt2.
@@ -290,27 +246,3 @@ def perpendicular_distance_pt_to_line_2d(
     dist: float = n / d
     # print(f"dist={dist} ydist={ydist} xdist={xdist} n={n} d={d}")
     return dist
-
-
-def valid(wp: Union[cq.Workplane, Sequence[cq.Workplane]]) -> bool:
-    if isinstance(wp, Sequence):
-        return reduce(
-            lambda value, s: value and cast(cq.Shape, s.val()).isValid(), wp, True
-        )
-    else:
-        return cast(cq.Shape, wp.val()).isValid()
-
-
-def updatePending(wp: cq.Workplane) -> cq.Workplane:
-    """
-    Clear pendingWires and pendingEdges and then add
-    objects that are wires or edges to the appropriate
-    pending list. Another way to fix this would be to
-    add a parameter to toPending which would do the
-    clear before the extending operation.
-
-    Fix cq bug https://github.com/CadQuery/cadquery/issues/421
-    """
-    wp.ctx.pendingWires = []
-    wp.ctx.pendingEdges = []
-    return wp.toPending()

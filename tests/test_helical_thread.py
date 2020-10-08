@@ -58,14 +58,14 @@ def test_ext_clearance(
         height=height,
         pitch=pitch,
         radius=radius,
-        angle_degs=angle_degs,
-        major_cutoff=major_cutoff,
-        minor_cutoff=minor_cutoff,
-        thread_overlap=thread_overlap,
         inset_offset=inset,
         taper_in_rpos=taper_in_rpos,
         taper_out_rpos=taper_out_rpos,
+        angle_degs=angle_degs,
         ext_clearance=ext_clearance,
+        major_cutoff=major_cutoff,
+        minor_cutoff=minor_cutoff,
+        thread_overlap=thread_overlap,
     )
     ths: ThreadHelixes = helical_thread(ht)
     print(f"ths={vars(ths)}")
