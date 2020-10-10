@@ -1,5 +1,5 @@
 from copy import deepcopy
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from math import degrees, radians, sin, tan
 from typing import List
 
@@ -16,14 +16,18 @@ class HelicalThread(Helix):
     """
 
     angle_degs: float = 45  #: angle in degrees
-    ext_clearance: float = (
-        0.1  #: External clearance between external and internal threads
-    )
     major_cutoff: float = 0  #: Size of of flat at the major diameter
     minor_cutoff: float = 0  #: Size of flat at the minor diameter
-    thread_overlap: float = 0.001  #: Amount to overlap threads with the core so union of core and threads is a manifold
+    ext_clearance: float = 0.1
+    """External clearance between external and internal threads"""
+    thread_overlap: float = 0.001
+    """
+    Amount to overlap threads with the core so the union of core and
+    threads is a manifold
+    """
 
 
+@dataclass
 class ThreadHelixes:
     """
     The helixes representing the internal thread, prefixed with `int_` and
@@ -32,18 +36,13 @@ class ThreadHelixes:
 
     ht: HelicalThread  #: The basic Dimensions of the helixes
 
-    int_helix_radius: float  #: The internal thread radius
-    int_helixes: List[HelixLocation]  #: List of the internal helix locations
+    int_helix_radius: float = 0  #: The internal thread radius
+    int_helixes: List[HelixLocation] = field(default_factory=list)
+    """List of the internal helix locations"""
 
-    ext_helix_radius: float  #: The external thread radius
-    ext_helixes: List[HelixLocation]  #: List of the external helix locations
-
-    def __init__(self, ht: HelicalThread) -> None:
-        self.ht = ht
-        self.int_helix_radius = 0
-        self.int_helixes = []
-        self.ext_helix_radius = 0
-        self.ext_helixes = []
+    ext_helix_radius: float = 0  #: The external thread radius
+    ext_helixes: List[HelixLocation] = field(default_factory=list)
+    """List of the external helix locations"""
 
 
 def helical_thread(ht: HelicalThread) -> ThreadHelixes:
