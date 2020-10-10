@@ -28,8 +28,7 @@ SRCS= \
  tests/__init__.py \
  tests/test_helical_thread.py
 
-#format_srcs=setup.py helical_thread/ tests/ examples/
-format_srcs=setup.py helical_thread/ tests/
+format_srcs=setup.py helical_thread/ tests/ examples/
 
 # Default target
 .PHONY: help
