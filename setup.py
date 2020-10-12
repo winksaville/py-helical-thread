@@ -6,8 +6,8 @@ from typing import List
 
 from setuptools import find_packages, setup
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+with open("README.rst", "r") as fh:
+    readme = fh.read()
 
 requirements: List[str] = [
     "taperable-helix",
@@ -43,9 +43,9 @@ setup(
     ],
     keywords="helical helix thread",
     # entry_points={"console_scripts": ["helicalthread=helical_thread.command_line:main"],},
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    packages=find_packages(),
+    long_description=readme + "\n\n",
+    long_description_content_type="text/x-rst",
+    packages=find_packages(include=["helical_thread"]),
     install_requires=requirements,
     setup_requires=setup_requirements,
     platform="any",

@@ -9,17 +9,25 @@ from taperable_helix import Helix, HelixLocation
 @dataclass
 class HelicalThread(Helix):
     """
-    A set of fields used to represent a helical thread. When passes to
+    A set of fields used to represent a helical thread and passed as
+    the parameter to `helical_thread`.
 
-    You can control the size and spacing of the thread using
-    the various using the fields below and in Helix.
+    Control of the size and spacing of the thread using the various
+    fields in Helix and those below.
     """
 
-    angle_degs: float = 45  #: angle in degrees
-    major_cutoff: float = 0  #: Size of of flat at the major diameter
-    minor_cutoff: float = 0  #: Size of flat at the minor diameter
+    angle_degs: float = 45
+    """angle in degrees"""
+
+    major_cutoff: float = 0
+    """Size of of flat at the major diameter"""
+
+    minor_cutoff: float = 0
+    """Size of flat at the minor diameter"""
+
     ext_clearance: float = 0.1
     """External clearance between external and internal threads"""
+
     thread_overlap: float = 0.001
     """
     Amount to overlap threads with the core so the union of core and
@@ -30,17 +38,22 @@ class HelicalThread(Helix):
 @dataclass
 class ThreadHelixes:
     """
-    The helixes representing the internal thread, prefixed with `int_` and
-    the external thread, prefixed with `ext_`
+    The helixes returned by helical_thread` that represents the internal
+    thread, prefixed with `int_` and the external thread, prefixed with `ext_`.
     """
 
-    ht: HelicalThread  #: The basic Dimensions of the helixes
+    ht: HelicalThread
+    """The basic Dimensions of the helixes"""
 
-    int_helix_radius: float = 0  #: The internal thread radius
+    int_helix_radius: float = 0
+    """The internal thread radius"""
+
     int_helixes: List[HelixLocation] = field(default_factory=list)
     """List of the internal helix locations"""
 
-    ext_helix_radius: float = 0  #: The external thread radius
+    ext_helix_radius: float = 0
+    """The external thread radius"""
+
     ext_helixes: List[HelixLocation] = field(default_factory=list)
     """List of the external helix locations"""
 

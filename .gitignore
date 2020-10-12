@@ -21,3 +21,6 @@ __pycache__/
 .coverage
 .coverage.*
 .cache
+
+# Sphinx documentation
+docs/_build/

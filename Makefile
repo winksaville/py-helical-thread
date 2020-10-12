@@ -4,6 +4,17 @@
 # and PyPi-token respectively.  When making 'release' or 'release-test' set username
 # to __token__ and then get and paste the token from 1Password.
 
+define BROWSER_PYSCRIPT
+import os, webbrowser, sys
+
+from urllib.request import pathname2url
+
+webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
+endef
+export BROWSER_PYSCRIPT
+
+BROWSER := python -c "$$BROWSER_PYSCRIPT"
+
 # Script which automatically create the help test from '##' comments after a target
 define PRINT_HELP_PYSCRIPT
 import re, sys
@@ -69,9 +80,32 @@ coverage: ## check code coverage quickly with the default Python
 	# coverage html
 	# $(BROWSER) htmlcov/index.html
 
-.PHONY: push-tags
-push-tags: ## Push tags to github creates "Releases & Tags" and zipped srcs
-	git push --tags
+.PHONY: clean-docs
+clean-docs: ## remove doc artifacts
+	$(MAKE) -C docs clean
+
+# Currently not used
+.PHONY: apidocs
+apidocs:
+	rm -f docs/helical_thread.rst
+	rm -f docs/modules.rst
+	sphinx-apidoc -o docs/ helical_thread
+
+.PHONY: docs
+docs: clean-docs ## generate Sphinx HTML documentation, including API docs
+	$(MAKE) -C docs html
+
+.PHONY: showdocs
+showdocs: ## Use the browser to show the docs
+	$(BROWSER) docs/_build/html/index.html
+
+.PHONY: servedocs
+servedocs: docs ## compile the docs watching for changes
+	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
+
+.PHONY: push-with-tags
+push-with-tags: ## Push origin master with tags with zipped srcs on github
+	git push origin main --tags
 
 .PHONY: bumpver-patch
 bumpver-patch: ## Bump patch field of current_version
@@ -85,6 +119,14 @@ bumpver-minor: ## Bump minor field of current_version
 bumpver-major: ## Bump major field of current_version
 	bump2version major
 
+.PHONY: clean-test
+clean-test: ## remove test and coverage artifacts
+	rm -fr .tox/
+	rm -f .coverage
+	rm -fr htmlcov/
+	rm -fr .pytest_cache
+	find . -name '.mypy_cache' -exec rm -fr {} +
+
 .PHONY: test, t
 t: test
 test: ## Test
@@ -96,7 +138,6 @@ test-all: ## Run tests on every Python version with tox
 
 .PHONY: install-dev
 install-dev: ## Developement install in editable mode
-	#pip install -e .
 	pip install -e . -r dev-requirements.txt
 
 # Update dependencies, used by update
@@ -121,8 +162,6 @@ update-init:
 update-dev: clean update-init update-deps install-dev ## Update dev-requirements
 
 .PHONY: clean
-clean:
-	rm -f .coverage
-	rm -rf .tox/
+clean: clean-docs clean-test
 	rm -rf build dist helical_thread.egg-info ./helical_thread/__pycache__ ./tests/__pycache__
 	rm -rf .mypy_cache .pytest_cache
