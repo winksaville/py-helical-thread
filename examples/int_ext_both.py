@@ -60,3 +60,11 @@ if __name__ == "__main__":
         add_traces("ext", fig, ths, ths.ext_helixes, vert_offset)
 
     fig.show()
+
+    if params.write:
+        try:
+            fname = "data/int_ext_both.webp"
+            fig.write_image(fname)
+            print(f"wrote: {fname}")
+        except Exception as e:
+            print(f"Unable to write files; maybe run from project root: e={e}")

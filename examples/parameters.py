@@ -9,6 +9,9 @@ from helical_thread import HelicalThread, ThreadHelixes, helical_thread
 # Show internal, external or both threads
 DFLT_int_ext_both: str = "both"
 
+# Write show output to file
+DFLT_write: bool = True
+
 # Show quick usage if no parameters
 DFLT_quick_usage: bool = True
 
@@ -56,6 +59,7 @@ DFLT_taper_in_rpos: float = 1 - DFLT_taper_out_rpos
 
 class Parameters:
     int_ext_both: str
+    write: bool
     quick_usage: bool
     stl_tolerance: float
     dia_major: float
@@ -71,17 +75,21 @@ class Parameters:
         # self.dia_major: float = 0
 
         # What to show: internal, external or both
-        s: Union[str, None] = config.get("default", "int_ext_both", fallback=None)
-        self.int_ext_both = eval(s) if s is not None else DFLT_int_ext_both
+        v: Union[str, None] = config.get("default", "int_ext_both", fallback=None)
+        self.int_ext_both = eval(v) if v is not None else DFLT_int_ext_both
 
         # If quick_usage is True then print the quick usgae if there are no parameters
-        b: Union[str, None] = config.get("default", "quick_usage", fallback=None)
-        self.quick_usage = bool(eval(b)) if b is not None else DFLT_quick_usage
+        v = config.get("default", "write", fallback=None)
+        self.write = bool(eval(v)) if v is not None else DFLT_write
+
+        # If quick_usage is True then print the quick usgae if there are no parameters
+        v = config.get("default", "quick_usage", fallback=None)
+        self.quick_usage = bool(eval(v)) if v is not None else DFLT_quick_usage
 
         # Clearance between internal threads and external threads.
         # The external threads are horzitionally moved to create
         # the clearance.
-        v: Union[str, None] = config.get("default", "ext_clearance", fallback=None)
+        v = config.get("default", "ext_clearance", fallback=None)
         self.ht.ext_clearance = float(eval(v)) if v is not None else DFLT_ext_clearance
 
         # Set to guarantee the thread and core overlap and a manifold is created
@@ -145,6 +153,12 @@ class Parameters:
             nargs="?",
             type=str,
             default=self.int_ext_both,
+        )
+        parser.add_argument(
+            "-w",
+            "--write",
+            help="Write output of show to an image file",
+            action="store_true",
         )
         parser.add_argument(
             "-qu",
@@ -257,6 +271,7 @@ class Parameters:
             print("Using defaults, use '-h' for help")
 
         self.int_ext_both = args.int_ext_both
+        self.write = args.write
         self.quick_usage = args.quick_usage
         self.dia_major = args.diameter
         self.stl_tolerance = args.stl_tolerance
