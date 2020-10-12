@@ -19,16 +19,22 @@ def add_traces(
     vert_offset: float = 0,
 ) -> None:
 
-    # Loop through and add a trace for each thread
+    # Loop over each of the helexis adding a trace for each
     for i, hl in enumerate(helix_locations):
+        # Create the helix funtion
         f = ths.ht.helix(hl)
+
+        # Create a list of points using map to invoke "f"
+        # over 500 points between first_t and last_t inclusive.
         points = list(
             map(f, linspace(ths.ht.first_t, ths.ht.last_t, num=500, dtype=float))
         )
 
+        # Check if we should offset the points
         if vert_offset != 0:
             points = [(x, y, z + vert_offset) for x, y, z in points]
 
+        # Add a trace decomposing points into three separate lists
         fig.add_trace(
             go.Scatter3d(
                 # Extract x, y, z
@@ -51,6 +57,8 @@ if __name__ == "__main__":
         layout_scene_camera_projection_type="orthographic",
     )
 
+    # Add the traces for internal/external or both
+
     if (params.int_ext_both == "int") or (params.int_ext_both == "both"):
         add_traces("int", fig, ths, ths.int_helixes)
 
@@ -59,9 +67,11 @@ if __name__ == "__main__":
         vert_offset = ths.ht.pitch / 2 if params.int_ext_both == "both" else 0
         add_traces("ext", fig, ths, ths.ext_helixes, vert_offset)
 
+    # Show the figure
     fig.show()
 
     if params.write:
+        # Write the image is requested
         try:
             fname = "data/int_ext_both.webp"
             fig.write_image(fname)
