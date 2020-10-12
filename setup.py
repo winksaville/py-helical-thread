@@ -24,7 +24,7 @@ test_requirements: List[str] = [
 
 setup(
     name="helical_thread",
-    version="0.1.0",
+    version="0.2.0",
     url="https://github.com/winksaville/py-helical-thread",
     license="MIT",
     author="Wink Saville",
