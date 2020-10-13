@@ -143,9 +143,6 @@ See `dev-requirements.in`_ for most up to date list:
 * numpy
 * pandas
 
-Credits
--------
-
-.. _`helicalthread.py`: https://github.com/winksaville/py-helical-thread/blob/master/helical_thread/helicalthread.py
-.. _`int_ext_bolh.py`: https://github.com/winksaville/py-helical-thread/blob/master/examples/int_ext_both.py
-.. _`dev-requirements.in`: https://github.com/winksaville/py-helical-thread/blob/master/dev-requirements.in
+.. _`helicalthread.py`: https://github.com/winksaville/py-helical-thread/blob/main/helical_thread/helicalthread.py
+.. _`int_ext_both.py`: https://github.com/winksaville/py-helical-thread/blob/main/examples/int_ext_both.py
+.. _`dev-requirements.in`: https://github.com/winksaville/py-helical-thread/blob/main/dev-requirements.in
