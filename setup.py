@@ -44,11 +44,11 @@ setup(
     keywords="helical helix thread",
     # entry_points={"console_scripts": ["helicalthread=helical_thread.command_line:main"],},
     long_description=readme + "\n\n",
-    long_description_content_type="text/x-rst",
+    include_package_data=True,
     packages=find_packages(include=["helical_thread"]),
     install_requires=requirements,
     setup_requires=setup_requirements,
-    platform="any",
     tests_require=test_requirements,
     test_suite="tests",
+    zip_safe=False,
 )

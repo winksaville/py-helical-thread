@@ -47,19 +47,31 @@ help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 
-.PHONY: build
-build: build/completed_ts ## Build the distribution
+.PHONY: dist
+dist: clean docs ## builds source and wheel package
+	python setup.py sdist
+	python setup.py bdist_wheel
+	ls -l dist
 
-build/completed_time_stamp: ${SRCS}
-	python3 setup.py sdist bdist_wheel
-	touch build/completed_time_stamp
+.PHONY: install
+install: clean ## Install from pypi.org
+	pip install taperable-helix
+
+.PHONY: install-test
+install-test: clean ## Install from test.pypi.org
+	pip install taperable-helix
+
+.PHONY: install-dev
+install-dev: ## Install from the sources for developemeent
+	#pip install -e .
+	pip install -e . -r dev-requirements.txt
 
 .PHONY: release
-release: build/completed_ts ## Upload a release to pypi.org
+release: dist ## Upload a release to pypi.org
 	python3 -m twine upload dist/*
 
 .PHONY: release-test
-release-test: build/completed_ts ## Upload a releas to test.pypi.org
+release-test: dist ## Upload a release to test.pypi.org
 	python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 .PHONY: f, format
@@ -135,10 +147,6 @@ test: ## Test
 .PHONY: test-all
 test-all: ## Run tests on every Python version with tox
 	tox
-
-.PHONY: install-dev
-install-dev: ## Developement install in editable mode
-	pip install -e . -r dev-requirements.txt
 
 # Update dependencies, used by update
 # Note: You can not use --generate-hashes parameter with editable installs
