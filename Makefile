@@ -54,8 +54,8 @@ dist: clean docs ## builds source and wheel package
 	ls -l dist
 
 .PHONY: install
-install: clean ## Install from pypi.org
-	pip install taperable-helix
+install: clean-no-docs ## Install from pypi.org
+	pip install helical-thread
 
 .PHONY: install-test
 install-test: clean ## Install from test.pypi.org
@@ -169,7 +169,10 @@ update-init:
 .PHONY: update-dev
 update-dev: clean update-init update-deps install-dev ## Update dev-requirements
 
-.PHONY: clean
-clean: clean-docs clean-test
+.PHONY: clean-no-docs
+clean-no-docs: clean-test
 	rm -rf build dist helical_thread.egg-info ./helical_thread/__pycache__ ./tests/__pycache__
 	rm -rf .mypy_cache .pytest_cache
+
+.PHONY: clean
+clean: clean-no-docs clean-docs

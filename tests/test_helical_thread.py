@@ -1,7 +1,7 @@
 from math import isclose
 from typing import List, Tuple
 
-import plotly.graph_objs as go
+# import plotly.graph_objs as go
 import pytest
 from utils import perpendicular_distance_pt_to_line_2d
 

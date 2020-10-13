@@ -36,8 +36,8 @@ setup(
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
-        "Natural Language :: English",
         "Operating System :: OS Independent",
+        "Natural Language :: English",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
@@ -48,7 +48,7 @@ setup(
     packages=find_packages(include=["helical_thread"]),
     install_requires=requirements,
     setup_requires=setup_requirements,
-    tests_require=test_requirements,
     test_suite="tests",
+    tests_require=test_requirements,
     zip_safe=False,
 )
